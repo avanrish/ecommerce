@@ -32,6 +32,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "8080:80"
+    volumes:
+      - ecommerce:/var/lib/pgadmin
 volumes:
   ecommerce:
 
