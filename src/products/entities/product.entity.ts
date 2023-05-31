@@ -13,4 +13,11 @@ export class Product extends BaseEntity {
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
   price: number;
+
+  static example = {
+    id: 1,
+    title: 'title',
+    author: 'author',
+    price: 9.99,
+  } as Product;
 }

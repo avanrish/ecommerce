@@ -14,7 +14,10 @@ export class CreateProductDto {
   author: string;
 
   @IsNotEmpty({ message: ProductsError.PriceEmpty })
-  @IsNumber({}, { message: ProductsError.PriceShouldBeNumber })
+  @IsNumber(
+    { maxDecimalPlaces: 2 },
+    { message: ProductsError.PriceShouldBeNumber },
+  )
   @IsPositive({ message: ProductsError.PriceShouldBePositive })
   @ApiProperty()
   price: number;
