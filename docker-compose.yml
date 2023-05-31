@@ -17,23 +17,24 @@ services:
       - pgdatabase
   pgdatabase:
     image: postgres:15.3
-    restart: no
+    restart: always
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
       POSTGRES_DB: ecommerce
     volumes:
-      - ecommerce:/var/lib/postgresql/data
+      - ecommerce_pgdata:/var/lib/postgresql/data
   pgAdmin:
     image: dpage/pgadmin4
-    restart: no
+    restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "8080:80"
     volumes:
-      - ecommerce:/var/lib/pgadmin
+      - ecommerce_pgAdmin:/var/lib/pgadmin
 volumes:
-  ecommerce:
+  ecommerce_pgdata:
+  ecommerce_pgAdmin:
 
