@@ -1,8 +1,7 @@
 import * as Joi from 'joi';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModuleOptions } from '@nestjs/config';
-import dotenv from 'dotenv';
-dotenv.config();
+import 'dotenv/config';
 
 export const appConfig: ConfigModuleOptions = {
   validationSchema: Joi.object({

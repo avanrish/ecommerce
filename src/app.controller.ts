@@ -1,9 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('pages')
 @Controller()
-export class AppController {
-  @Get()
-  getHello(): string {
-    return 'Hello World!';
-  }
-}
+export class AppController {}
