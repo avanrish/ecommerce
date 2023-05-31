@@ -13,30 +13,25 @@ services:
       - ./src:/app/src
       - ./package.json:/app/package.json
       - ./.env:/app/.env
-    networks:
-      - nestjs
     depends_on:
-      - database
-
-  database:
-    container_name: ecommerce
-    image: mysql:8.0
-    restart: always
-    command: --default-authentication-plugin=mysql_native_password
-    ports:
-        - "3306:3306"
-        - "33060:33060"
+      - pgdatabase
+  pgdatabase:
+    image: postgres:15.3
+    restart: no
     environment:
-      MYSQL_DATABASE: ecommerce
-      MYSQL_PASSWORD: ecommerce
-      MYSQL_ROOT_PASSWORD: ecommerce
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: ecommerce
     volumes:
-      - nestjs-data:/var/lib/mysql
-    networks:
-      - nestjs
+      - ecommerce:/var/lib/postgresql/data
+  pgAdmin:
+    image: dpage/pgadmin4
+    restart: no
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
 volumes:
-  nestjs-data:
+  ecommerce:
 
-networks:
-  nestjs:
-    driver: bridge
