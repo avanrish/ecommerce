@@ -1,13 +1,22 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
+import hbs = require('hbs');
+import { AppModule } from './app.module';
+
+hbs.registerPartials(join(__dirname, '..', 'views/partials'));
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.setGlobalPrefix('api', { exclude: [''] });
   app.useGlobalPipes(new ValidationPipe({ stopAtFirstError: true }));
+
+  app.useStaticAssets(join(__dirname, '..', 'public'));
+  app.setBaseViewsDir(join(__dirname, '..', 'views'));
+  app.setViewEngine('hbs');
 
   const config = new DocumentBuilder()
     .setTitle('E-commerce API')
