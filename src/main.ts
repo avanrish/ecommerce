@@ -11,7 +11,7 @@ hbs.registerPartials(join(__dirname, '..', 'views/partials'));
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  app.setGlobalPrefix('api', { exclude: [''] });
+  app.setGlobalPrefix('api', { exclude: ['', 'cart'] });
   app.useGlobalPipes(new ValidationPipe({ stopAtFirstError: true }));
 
   app.useStaticAssets(join(__dirname, '..', 'public'));

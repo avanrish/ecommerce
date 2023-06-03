@@ -8,40 +8,14 @@
       <a class="btn btn-ghost normal-case text-xl">E-commerce</a>
     </div>
     <div class="flex-none">
-      <div class="dropdown dropdown-end">
-        <label tabindex="0" class="btn btn-ghost btn-circle">
+      <div>
+        <a tabindex="0" class="btn btn-ghost btn-circle" href="/cart">
           <div class="indicator">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-<!--            <span class="badge badge-sm indicator-item">8</span>-->
+            <span class="badge badge-sm indicator-item" data-name="badge" style="display:none;"></span>
           </div>
-        </label>
-        <div tabindex="0" class="mt-3 card card-compact dropdown-content w-52 bg-base-100 shadow z-[1]">
-          <div class="card-body">
-            <span class="font-bold text-lg">8 Items</span>
-            <span class="text-info">Subtotal: $999</span>
-            <div class="card-actions">
-              <button class="btn btn-primary btn-block">View cart</button>
-            </div>
-          </div>
-        </div>
+        </a>
       </div>
-<!--      <div class="dropdown dropdown-end">-->
-<!--        <label tabindex="0" class="btn btn-ghost btn-circle avatar">-->
-<!--          <div class="w-10 rounded-full">-->
-<!--            <img src="/images/stock/photo-1534528741775-53994a69daeb.jpg" />-->
-<!--          </div>-->
-<!--        </label>-->
-<!--        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">-->
-<!--          <li>-->
-<!--            <a class="justify-between">-->
-<!--              Profile-->
-<!--              <span class="badge">New</span>-->
-<!--            </a>-->
-<!--          </li>-->
-<!--          <li><a>Settings</a></li>-->
-<!--          <li><a>Logout</a></li>-->
-<!--        </ul>-->
-<!--      </div>-->
     </div>
   </div>
     <div class="overflow-x-auto">
@@ -63,9 +37,9 @@
             <td>{{this.title}}</td>
             <td>{{this.author}}</td>
             <td>{{this.price}}</td>
-            <td>
-              <input type="text" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
-              <button></button>
+            <td class="flex items-center space-x-2 justify-end">
+              <input type="number" placeholder="0" class="input input-bordered w-full max-w-[100px]" min="0" id="quantity-{{this.id}}" />
+              <button class="btn btn-primary" onClick="addToCart({{this.id}})">Add to cart</button>
             </td>
           </tr>
           {{/each}}
@@ -73,5 +47,45 @@
       </table>
     </div>
   </div>
+<script>
+  (async () => {
+    const cartId = localStorage.getItem('cartId')
+    const data = await fetch(`/api/cart/${cartId}`).then(res => res.json())
+    if (data?.cartProducts?.length > 0) {
+      const badge = document.querySelector(`[data-name="badge"]`)
+      badge.innerText = data.cartProducts.reduce((acc, curr) => acc + curr.quantity, 0)
+      badge.style.display = 'block'
+    } else {
+      localStorage.removeItem('cartId')
+    }
+  })()
+
+  async function addToCart(id) {
+    const quantityInput = document.getElementById(`quantity-${id}`)
+    const quantity = quantityInput.value
+    const badge = document.querySelector(`[data-name="badge"]`)
+    const cartId = localStorage.getItem('cartId')
+    const dataObject = {
+      quantity: Number(quantity),
+      productId: id,
+      ...(cartId ? { cartId } : {})
+    }
+    const data = await fetch('/api/cart/add-product', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dataObject)
+    }).then(res => res.json())
+    if (data?.id) localStorage.setItem('cartId', data.id)
+    if (data?.cartProducts?.length > 0) {
+      badge.innerText = data.cartProducts.reduce((acc, curr) => acc + curr.quantity, 0)
+      badge.style.display = 'block'
+      quantityInput.value = 0;
+    } else {
+      badge.style.display = 'none'
+    }
+  }
+</script>
 </body>
 </html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+{{> head }}
+<body>
+  <div class="mx-auto max-w-screen-lg">
+    <div class="navbar bg-base-100">
+    <div class="flex-1">
+      <a class="btn btn-ghost normal-case text-xl">Cart</a>
+      <a class="btn btn-ghost normal-case text-xl" href="/">Home</a>
+      <div class="ml-auto mr-2 flex items-center">Total price:<span data-name="totalPrice" class="line-through text-sm mx-1" style="display:none;">()</span><span data-name="priceToPay"></span></div>
+      <button class=" btn btn-ghost normal-case text-xl" onClick="">Place Order</button>
+    </div>
+  </div>
+    <div class="overflow-x-auto">
+      <table class="table">
+        <!-- head -->
+        <thead>
+          <tr>
+            <th></th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Price</th>
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<script>
+  (async () => {
+    const cartId = localStorage.getItem('cartId')
+    const data = await fetch(`/api/cart/${cartId}`).then(res => res.json())
+    if (data?.cartProducts?.length > 0) {
+      const prices = await fetch(`/api/cart/${cartId}/prices`).then(res => res.json())
+      if(prices.priceToPay !== prices.totalPrice) {
+        const original = document.querySelector(`[data-name="totalPrice"]`)
+        original.innerText = `(${prices.totalPrice})`
+        original.style.display = 'block'
+      }
+      const total = document.querySelector(`[data-name="priceToPay"]`)
+      total.innerText = prices.priceToPay
+      data?.cartProducts?.forEach(cartItem => {
+        /*
+        <tr class="hover">
+            <th>id</th>
+            <td>title</td>
+            <td>author</td>
+            <td>price</td>
+            <td>quantity</td>
+          </tr>
+          Generate the above structure and append it to tbody
+         */
+        const tr = document.createElement('tr')
+        tr.classList.add('hover')
+        tr.innerHTML = `
+          <th>${cartItem.product.id}</th>
+          <td>${cartItem.product.title}</td>
+          <td>${cartItem.product.author}</td>
+          <td>${cartItem.product.price}</td>
+          <td>${cartItem.quantity}</td>
+        `
+        document.querySelector('tbody').appendChild(tr)
+      })
+    } else {
+      localStorage.removeItem('cartId')
+    }
+
+  })()
+</script>
+</body>
+</html>
