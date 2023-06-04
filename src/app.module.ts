@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { appConfig, dbConfig } from './app.config';
 import { ProductsModule } from './products/products.module';
-import { CartModule } from './cart/cart.module';
+import { CartsModule } from './carts/carts.module';
 import { CartProductsModule } from './cart-products/cart-products.module';
 import { OrdersModule } from './orders/orders.module';
 import { OrderProductsModule } from './order-products/order-products.module';
@@ -14,7 +14,7 @@ import { OrderProductsModule } from './order-products/order-products.module';
     ConfigModule.forRoot(appConfig),
     TypeOrmModule.forRoot(dbConfig),
     ProductsModule,
-    CartModule,
+    CartsModule,
     CartProductsModule,
     OrdersModule,
     OrderProductsModule,

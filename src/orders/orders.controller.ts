@@ -3,7 +3,7 @@ import { Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import { Order } from './entities/order.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { CartService } from '../cart/cart.service';
+import { CartsService } from '../carts/carts.service';
 import { OrdersError } from './enums/orders-error.enum';
 import { OrderProduct } from '../order-products/entities/order-product.entity';
 import { OrdersService } from './orders.service';
@@ -12,7 +12,7 @@ import { OrdersService } from './orders.service';
 @Controller('orders')
 export class OrdersController {
   constructor(
-    private readonly cartsService: CartService,
+    private readonly cartsService: CartsService,
     private readonly ordersService: OrdersService,
   ) {}
 

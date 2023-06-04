@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Cart } from './entities/cart.entity';
 
 @Injectable()
-export class CartService {
+export class CartsService {
   constructor(
     @InjectRepository(Cart) private cartRepository: Repository<Cart>,
   ) {}
@@ -16,9 +16,9 @@ export class CartService {
   findOne(id: string) {
     return this.cartRepository
       .createQueryBuilder('cart')
-      .leftJoinAndSelect('cart.cartProducts', 'cartProducts')
+      .leftJoinAndSelect('carts.cartProducts', 'cartProducts')
       .leftJoinAndSelect('cartProducts.product', 'product')
-      .where('cart.id = :id', { id })
+      .where('carts.id = :id', { id })
       .getOne();
   }
 

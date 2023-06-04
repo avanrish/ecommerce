@@ -8,7 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CartService } from './cart.service';
+import { CartsService } from './carts.service';
 import { AddProductToCartDto } from './dto/add-product-to-cart.dto';
 import { CartProductsService } from '../cart-products/cart-products.service';
 import { ProductsService } from '../products/products.service';
@@ -16,9 +16,9 @@ import { CartsError } from './enums/carts-error.enum';
 
 @ApiTags('Cart')
 @Controller('cart')
-export class CartController {
+export class CartsController {
   constructor(
-    private readonly cartService: CartService,
+    private readonly cartsService: CartsService,
     private readonly cartProductsService: CartProductsService,
     private readonly productsService: ProductsService,
   ) {}
@@ -27,8 +27,8 @@ export class CartController {
   async addProduct(@Body() addProductToCartDto: AddProductToCartDto) {
     const { cartId, productId, quantity } = addProductToCartDto;
     const cart = cartId
-      ? await this.cartService.findOne(cartId)
-      : this.cartService.create();
+      ? await this.cartsService.findOne(cartId)
+      : this.cartsService.create();
 
     const product = await this.productsService.findOne(productId);
     if (!product) throw new NotFoundException([CartsError.ProductNotFound]);
@@ -57,7 +57,7 @@ export class CartController {
   async getProduct(@Param('id') id: string) {
     let data;
     try {
-      data = await this.cartService.findOne(id);
+      data = await this.cartsService.findOne(id);
     } catch {
       throw new BadRequestException([CartsError.CartIdShouldBeUUID]);
     }
@@ -68,11 +68,11 @@ export class CartController {
   async getProductPrices(@Param('id') id: string) {
     let data;
     try {
-      data = await this.cartService.findOne(id);
+      data = await this.cartsService.findOne(id);
     } catch {
       throw new BadRequestException([CartsError.CartIdShouldBeUUID]);
     }
     if (!data) throw new NotFoundException([CartsError.CartNotFound]);
-    return this.cartService.getCartPrices(data);
+    return this.cartsService.getCartPrices(data);
   }
 }

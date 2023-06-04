@@ -1,4 +1,4 @@
-import { Cart } from '../../cart/entities/cart.entity';
+import { Cart } from '../../carts/entities/cart.entity';
 import { Product } from '../../products/entities/product.entity';
 
 export interface ICreateCartProduct {
