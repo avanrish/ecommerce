@@ -30,8 +30,6 @@ export class CartController {
       ? await this.cartService.findOne(cartId)
       : this.cartService.create();
 
-    if (cart.isOrdered) throw new BadRequestException(CartsError.CartIsOrdered);
-
     const product = await this.productsService.findOne(productId);
     if (!product) throw new NotFoundException(CartsError.ProductNotFound);
 

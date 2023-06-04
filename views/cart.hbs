@@ -8,7 +8,7 @@
       <a class="btn btn-ghost normal-case text-xl">Cart</a>
       <a class="btn btn-ghost normal-case text-xl" href="/">Home</a>
       <div class="ml-auto mr-2 flex items-center">Total price:<span data-name="totalPrice" class="line-through text-sm mx-1" style="display:none;">()</span><span data-name="priceToPay"></span></div>
-      <button class=" btn btn-ghost normal-case text-xl" onClick="">Place Order</button>
+      <button class=" btn btn-ghost normal-case text-xl" onClick="orderProduct()">Place Order</button>
     </div>
   </div>
     <div class="overflow-x-auto">
@@ -68,6 +68,21 @@
     }
 
   })()
+
+  function orderProduct() {
+    fetch('/api/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({cartId: localStorage.getItem('cartId')})
+    })
+      .then(res => res.json())
+      .then(data => {
+        localStorage.removeItem('cartId')
+        window.open(data.redirectUri)
+      })
+  }
 </script>
 </body>
 </html>

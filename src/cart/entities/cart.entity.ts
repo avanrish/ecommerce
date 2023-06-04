@@ -1,10 +1,4 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { BaseEntity, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CartProduct } from '../../cart-products/entities/cart-product.entity';
 
 @Entity('Cart')
@@ -16,7 +10,4 @@ export class Cart extends BaseEntity {
     cascade: true,
   })
   cartProducts: CartProduct[];
-
-  @Column({ type: 'boolean', default: false })
-  isOrdered: boolean;
 }
