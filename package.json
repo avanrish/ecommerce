@@ -11,7 +11,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "tw:watch": "tailwindcss -i ./public/input.css -o ./public/output.css --watch",
+    "tw:watch": "tailwindcss -i ./public/input.css -o ./public/output.css --watch --minify",
     "tw:build": "tailwindcss -i ./public/input.css -o ./public/output.css --minify",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
