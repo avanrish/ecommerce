@@ -31,7 +31,7 @@ export class CartController {
       : this.cartService.create();
 
     const product = await this.productsService.findOne(productId);
-    if (!product) throw new NotFoundException(CartsError.ProductNotFound);
+    if (!product) throw new NotFoundException([CartsError.ProductNotFound]);
 
     const productIndexInCart = cart.cartProducts?.findIndex(
       (cartProduct) => cartProduct?.product?.id === productId,
@@ -59,9 +59,9 @@ export class CartController {
     try {
       data = await this.cartService.findOne(id);
     } catch {
-      throw new BadRequestException(CartsError.CartIdShouldBeUUID);
+      throw new BadRequestException([CartsError.CartIdShouldBeUUID]);
     }
-    if (!data) throw new NotFoundException(CartsError.CartNotFound);
+    if (!data) throw new NotFoundException([CartsError.CartNotFound]);
     return data;
   }
   @Get(':id/prices')
@@ -70,9 +70,9 @@ export class CartController {
     try {
       data = await this.cartService.findOne(id);
     } catch {
-      throw new BadRequestException(CartsError.CartIdShouldBeUUID);
+      throw new BadRequestException([CartsError.CartIdShouldBeUUID]);
     }
-    if (!data) throw new NotFoundException(CartsError.CartNotFound);
+    if (!data) throw new NotFoundException([CartsError.CartNotFound]);
     return this.cartService.getCartPrices(data);
   }
 }
